@@ -18,7 +18,7 @@ function checking($first_name, $last_name, $phone, $email, $date){
         echo "Please enter email";
     } elseif (((int)$phone)==0){
         echo "Please enter a valid phone number";        
-    } elseif ($domain=="" or $user==""){
+    } elseif ($domain=="" or $user=="" or strpos($email, ".com")==0){
         echo "Please enter a valid email";
     } else {
         adding($first_name, $last_name, $phone, $email, $date);

@@ -3,24 +3,52 @@
 <head>
 <meta charset="UTF-8">
 <title>Contact_listing</title>
+<link rel="stylesheet" href="listing_style.css">
 </head>
 <body>
 <div class="heading">
 <h2>Contact Management</h2></div>
-<br>First Name/email/phone : <input type="text" id="search"><input id="search_button" type="button" value="search" onclick="search()">
-<input type="button" onclick="clear1()" value="clear">
-<input type="button" onclick="add_contact()" value="add contact">
+<br>First Name/email/phone : <input id="search" type="text" id="search"><input id="search_button" type="button" value="search" onclick="search()">
+<input id="clear" type="button" onclick="clear1()" value="clear">
+<input id="add_contact" type="button" onclick="add_contact()" value="add contact">
 <table id="table">
 </table>
 <div id="status"></div>
 <br>
-<input id="one" type="button" value="1" onclick="sending_page(1)">
-<input id="two" type="button" value="2" onclick="sending_page(2)">
-<input id="three" type="button" value="3" onclick="sending_page(3)">
-<input id="four" type="button" value="4" onclick="sending_page(4)">
-<input id="five" type="button" value="5" onclick="sending_page(5)">
+<div id="page_buttons">
+<input id="next" type="button" value="prev" onclick="prev()">
+<input id="one" type="button" value="1" onclick="button_click(1)">
+<input id="two" type="button" value="2" onclick="button_click(2)">
+<input id="three" type="button" value="3" onclick="button_click(3)">
+<input id="four" type="button" value="4" onclick="button_click(4)">
+<input id="five" type="button" value="5" onclick="button_click(5)">
+<input id="next" type="button" value="next" onclick="next()">
+</div>
+<div id="current_page"></div>
 </body>
 <script>
+var current_page=1;
+var max_page=5;
+document.getElementById("current_page").innerHTML="Page No:"+current_page;
+function next(){
+	if(current_page<max_page){
+		current_page+=1;
+	}
+	sending_page(current_page);
+	document.getElementById("current_page").innerHTML="Page No:"+current_page;
+}
+function prev(){
+	if(current_page>1){
+		current_page-=1;
+	}
+	sending_page(current_page);
+	document.getElementById("current_page").innerHTML="Page No:"+current_page;
+}
+function button_click(num){
+	current_page=num;
+	sending_page(current_page);
+	document.getElementById("current_page").innerHTML="Page No:"+current_page;
+}
 var xhttp=new XMLHttpRequest();
 var value="";
 var data="";
@@ -29,6 +57,11 @@ window.onload=function(){
 }
 function switch_control(row_num){
 	var pag=Math.floor(row_num/4)+1;
+	max_page=pag;
+	if(current_page>max_page){
+		current_page=1;
+		document.getElementById("current_page").innerHTML="Page No:"+current_page;
+	}
 	switch(pag){
 	case 1:{
 	document.getElementById("one").disabled=false;
