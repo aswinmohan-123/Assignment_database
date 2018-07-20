@@ -23,17 +23,7 @@ $query = "select first_name,last_name,email,phone,status,created_date from data"
 if($search=="paged"){
     $page_num=$_POST["page"];
     $search_key=$_POST["data"];
-    if ($page_num=='1'){
-        $page=0;
-    } else if ($page_num=='2'){
-        $page=4;
-    } else if ($page_num=='3'){
-        $page=8;
-    } else if ($page_num=='4'){
-        $page=12;
-    } else if ($page_num=='5'){
-        $page=16;
-    }
+    $page=($page_num-1)*4;
 }
 if ($search=="searching") {
     $search_key=$_POST["value"];
