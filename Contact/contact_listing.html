@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Contact_listing</title>
+</head>
+<body>
+<div class="heading">
+<h2>Contact Management</h2></div>
+<br>First Name/email/phone : <input type="text" id="search"><input id="search_button" type="button" value="search" onclick="search()">
+<input type="button" onclick="clear1()" value="clear">
+<input type="button" onclick="add_contact()" value="add contact">
+<table id="table">
+</table>
+<div id="status"></div>
+<br>
+<input id="one" type="button" value="1" onclick="sending_page(1)">
+<input id="two" type="button" value="2" onclick="sending_page(2)">
+<input id="three" type="button" value="3" onclick="sending_page(3)">
+<input id="four" type="button" value="4" onclick="sending_page(4)">
+<input id="five" type="button" value="5" onclick="sending_page(5)">
+</body>
+<script>
+var xhttp=new XMLHttpRequest();
+var value="";
+var data="";
+window.onload=function(){
+	sending("#started#");
+}
+function switch_control(row_num){
+	var pag=Math.floor(row_num/4)+1;
+	switch(pag){
+	case 1:{
+	document.getElementById("one").disabled=false;
+	document.getElementById("two").disabled=true;
+	document.getElementById("three").disabled=true;
+	document.getElementById("four").disabled=true;
+	document.getElementById("five").disabled=true;
+	break;
+	}
+	case 2:{
+		document.getElementById("one").disabled=false;
+		document.getElementById("two").disabled=false;
+		document.getElementById("three").disabled=true;
+		document.getElementById("four").disabled=true;
+		document.getElementById("five").disabled=true;
+		break;
+	}
+	case 3:{
+		document.getElementById("one").disabled=false;
+		document.getElementById("two").disabled=false;
+		document.getElementById("three").disabled=false;
+		document.getElementById("four").disabled=true;
+		document.getElementById("five").disabled=true;
+		break;
+	}
+	case 4:{
+		document.getElementById("one").disabled=false;
+		document.getElementById("two").disabled=false;
+		document.getElementById("three").disabled=false;
+		document.getElementById("four").disabled=false;
+		document.getElementById("five").disabled=true;
+		break;
+	}
+	case 5:{
+		document.getElementById("one").disabled=false;
+		document.getElementById("two").disabled=false;
+		document.getElementById("three").disabled=false;
+		document.getElementById("four").disabled=false;
+		document.getElementById("five").disabled=false;
+		break;
+	}
+	}
+}
+function sending_page(value){
+	value1=document.getElementById("search").value;
+	sending("paged&page="+value+"&data="+value1);
+}
+function search(){
+	value=document.getElementById("search").value;
+	    sending("searching&value="+value);
+}
+function sending(value){
+	xhttp.open("POST","contact_server.php",true);
+	xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+	xhttp.send("search="+value);
+}
+xhttp.onreadystatechange=function(){
+	if(xhttp.readyState==4 && xhttp.status==200){
+		data=xhttp.responseText;
+		if (data==""){
+			document.getElementById("status").innerHTML="<h3>NO DATA FOUND<h3>";
+			document.getElementById("table").innerHTML="";
+		} else {
+			document.getElementById("status").innerHTML="";
+		var arr=data.split("/");
+		switch_control(arr[0]);
+	var dat='';
+	document.getElementById("table").innerHTML="";
+	dat="<th>Name</th><th>email</th><th>phone</th><th>status</th><th>created date</th>";
+	for(i=1;i<arr.length-1;i++){
+		var obj=JSON.parse(arr[i]);
+		dat+="<tr>";
+		dat+="<td>"+obj.first_name+" "+obj.last_name+"</td>"+
+		"<td>"+obj.email+"</td>"+
+		"<td>"+obj.phone+"</td>"+
+		"<td>"+obj.status+"</td>"+
+		"<td>"+obj.created_date+"</td>";
+		dat+="</tr>";
+	}
+	document.getElementById("table").innerHTML=dat;
+	}
+}
+}
+function add_contact(){
+	window.open("http://localhost:8080/Contact/add_contact.html","_self");
+}
+function clear1(){
+	document.getElementById("status").innerHTML="";
+	document.getElementById("table").innerHTML="";
+	document.getElementById("search").value="";
+}
+</script>
+</html>

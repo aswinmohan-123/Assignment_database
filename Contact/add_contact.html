@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Contact_Management</title>
+<link rel="stylesheet" href="add_contact_style.css">
+</head>
+<body>
+<div class="heading">
+<h2>Contact Management</h2></div>
+<input id="back" type="button" onclick="back()" value="Back">
+<div class="input">
+<form method="POST" action="">
+<h1 class="add_contact">Add Contact</h1>
+<br>First Name : <input id="first_name" type="text" name="first_name">
+<br>Last Name : <input id="last_name" type="text" name="last_name">
+<br>Phone : <input id="phone" type="text" name="phone">
+<br>Email : <input id="email" type="text" name="email">
+<br><input type="button" id="form_cancel" onclick="cancel()" value="Cancel">
+<input type="button" id="form_save" value="Save" onclick="save()">
+</form>
+</div>
+<div id="status_out"></div>
+</body>
+<script>
+xhttp=new XMLHttpRequest;
+function save(){
+	var first_name=document.getElementById("first_name").value;
+	var last_name=document.getElementById("last_name").value;
+	var phone=document.getElementById("phone").value;
+	var email=document.getElementById("email").value;
+	var packet="first_name="+first_name+"&last_name="+last_name+"&phone="+phone+"&email="+email;
+	xhttp.open("POST","add_contact_server.php",true);
+	xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+	xhttp.send(packet);
+	cancel();
+}
+function cancel(){
+	document.getElementById("first_name").value="";
+	document.getElementById("last_name").value="";
+	document.getElementById("phone").value="";
+	document.getElementById("email").value="";
+}
+function back(){
+	window.open("http://localhost:8080/Contact/contact_listing.html","_self");
+}
+xhttp=new XMLHttpRequest;
+xhttp.onreadystatechange=function(){
+	if(xhttp.readyState==4 && xhttp.status==200){
+		document.getElementById("status_out").innerHTML=xhttp.responseText;
+	}
+}
+</script>
+</html>
